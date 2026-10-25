@@ -1,0 +1,10 @@
+{
+  "name": "Gestor de Custos de Obras & Materiais",
+  "description": "Plataforma móvel e desktop com estética Apple iOS para gestão integrada de custos de obras, extração inteligente de faturas com IA Gemini Vision, consulta rápida e histórico de preços de materiais, e sincronização com Google Sheets.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

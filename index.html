@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Enat app - Gestor de Custos de Obras & Materiais</title>
+    <meta name="description" content="Enat app - Plataforma móvel e desktop para gestão integrada de custos de obras, extração inteligente de faturas com IA Gemini Vision, consulta rápida e histórico de preços de materiais, e sincronização com Google Sheets." />
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="Enat app" />
+    <meta property="og:description" content="Enat app - Gestão integrada de custos de obras, extração inteligente de faturas com IA Gemini Vision e consulta de preços." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Resilient WebSocket & HMR Handler for cloud proxy preview environment -->
+    <script>
+      (function() {
+        var OriginalWebSocket = window.WebSocket;
+        if (OriginalWebSocket) {
+          window.WebSocket = function(url, protocols) {
+            var urlStr = String(url || '');
+            // Intercept Vite dev server HMR websocket connections
+            if (urlStr.indexOf('@vite') !== -1 || urlStr.indexOf('vite') !== -1 || urlStr.indexOf('3000') !== -1 || (urlStr.indexOf('ais-') !== -1 && urlStr.indexOf('firestore') === -1)) {
+              var listeners = {};
+              var fakeWs = {
+                readyState: 1, // WebSocket.OPEN
+                CONNECTING: 0,
+                OPEN: 1,
+                CLOSING: 2,
+                CLOSED: 3,
+                url: urlStr,
+                protocol: '',
+                extensions: '',
+                bufferedAmount: 0,
+                binaryType: 'blob',
+                send: function() {},
+                close: function() {},
+                addEventListener: function(type, listener) {
+                  if (!listeners[type]) listeners[type] = [];
+                  listeners[type].push(listener);
+                  if (type === 'open') {
+                    setTimeout(function() {
+                      try { listener({ type: 'open', target: fakeWs }); } catch (e) {}
+                    }, 0);
+                  }
+                },
+                removeEventListener: function(type, listener) {
+                  if (!listeners[type]) return;
+                  listeners[type] = listeners[type].filter(function(l) { return l !== listener; });
+                },
+                dispatchEvent: function() { return true; },
+                onopen: null,
+                onclose: null,
+                onerror: null,
+                onmessage: null
+              };
+              setTimeout(function() {
+                if (typeof fakeWs.onopen === 'function') {
+                  try { fakeWs.onopen({ type: 'open', target: fakeWs }); } catch (e) {}
+                }
+              }, 0);
+              return fakeWs;
+            }
+            return new OriginalWebSocket(url, protocols);
+          };
+          window.WebSocket.prototype = OriginalWebSocket.prototype;
+          window.WebSocket.CONNECTING = 0;
+          window.WebSocket.OPEN = 1;
+          window.WebSocket.CLOSING = 2;
+          window.WebSocket.CLOSED = 3;
+        }
+
+        var isWsError = function(val) {
+          if (!val) return false;
+          var str = String(val.message || val.reason || val.stack || val || '');
+          return str.indexOf('WebSocket') !== -1 ||
+                 str.indexOf('closed without opened') !== -1 ||
+                 str.indexOf('@vite/client') !== -1;
+        };
+
+        window.onerror = function(message, source, lineno, colno, error) {
+          if (isWsError(message) || isWsError(error)) {
+            return true;
+          }
+          return false;
+        };
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (isWsError(event.reason)) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        }, true);
+
+        window.addEventListener('error', function(event) {
+          if (isWsError(event.message) || isWsError(event.error)) {
+            event.preventDefault();
+            event.stopPropagation();
+            return true;
+          }
+        }, true);
+
+        var origError = console.error;
+        console.error = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isWsError(arguments[i])) return;
+          }
+          origError.apply(console, arguments);
+        };
+      })();
+    </script>
+
+    <!-- iOS & PWA meta tags -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="application-name" content="Enat app" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Enat app" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-black text-white antialiased selection:bg-blue-600/30 selection:text-blue-300">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

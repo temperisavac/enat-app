@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode in Tailwind CSS v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --revolut-bg: #000000;
+    --revolut-card: rgba(18, 18, 22, 0.9);
+    --revolut-card-border: rgba(255, 255, 255, 0.08);
+    --revolut-text: #FFFFFF;
+    --revolut-subtext: #8E8E93;
+    --revolut-blue: #0075FF;
+    --revolut-blue-glow: rgba(0, 117, 255, 0.25);
+  }
+
+  .light {
+    --revolut-bg: #F4F4F7;
+    --revolut-card: rgba(255, 255, 255, 0.96);
+    --revolut-card-border: rgba(0, 0, 0, 0.06);
+    --revolut-text: #000000;
+    --revolut-subtext: #66666E;
+    --revolut-blue: #0075FF;
+    --revolut-blue-glow: rgba(0, 117, 255, 0.15);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--revolut-bg);
+    color: var(--revolut-text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    overscroll-behavior-y: none;
+  }
+
+  input, textarea, select {
+    user-select: text;
+  }
+
+  /* Style native selects and options to match Revolut dark/light theme */
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em 1em;
+    padding-right: 2.25rem !important;
+  }
+
+  select option {
+    background-color: #141418 !important;
+    color: #ffffff !important;
+    padding: 8px 12px;
+  }
+
+  .light select option,
+  html.light select option {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
+/* Revolut Signature Cards & Surfaces */
+.revolut-card {
+  background: var(--revolut-card);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid var(--revolut-card-border);
+}
+
+.revolut-glass-nav {
+  background: rgba(10, 10, 14, 0.88);
+  backdrop-filter: blur(32px) saturate(210%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.light .revolut-glass-nav {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(32px) saturate(210%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%);
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.revolut-shadow {
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+}
+
+.light .revolut-shadow {
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.06), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+/* Revolut Circular Action Buttons */
+.revolut-circle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.revolut-circle-btn:active {
+  transform: scale(0.92);
+}
+
+.revolut-circle-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.light .revolut-circle-icon {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #000000;
+}
+
+.revolut-circle-icon.active-blue {
+  background: #0075FF;
+  border-color: #0075FF;
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px -2px rgba(0, 117, 255, 0.4);
+}
+
+/* Safe Area Insets for Mobile */
+.pt-safe {
+  padding-top: max(env(safe-area-inset-top, 0px), 12px);
+}
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+}
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom, 0px);
+}

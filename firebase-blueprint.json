@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "Obra": {
+      "title": "Obra",
+      "description": "Projeto de construção ou remodelação gerido pelo utilizador",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID único da obra" },
+        "name": { "type": "string", "description": "Nome da obra" },
+        "client": { "type": "string", "description": "Nome do cliente" },
+        "address": { "type": "string", "description": "Morada ou localização" },
+        "status": { "type": "string", "description": "Estado da obra: em_curso, concluida, orcamento, pausada" },
+        "budget": { "type": "number", "description": "Orçamento total da obra" },
+        "startDate": { "type": "string", "description": "Data de início da obra" },
+        "createdAt": { "type": "string", "description": "Data de registo da obra" },
+        "ownerId": { "type": "string", "description": "UID do utilizador proprietário" }
+      },
+      "required": ["id", "name", "client", "status", "budget", "createdAt", "ownerId"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Fatura de fornecedor ou loja associada a uma obra",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID único da fatura" },
+        "obraId": { "type": "string", "description": "ID da obra a que a fatura foi anexada" },
+        "storeName": { "type": "string", "description": "Nome da loja ou fornecedor" },
+        "invoiceNumber": { "type": "string", "description": "Número do documento / fatura" },
+        "date": { "type": "string", "description": "Data da fatura" },
+        "taxId": { "type": "string", "description": "NIF ou NIPC do fornecedor" },
+        "subtotalWithoutTax": { "type": "number", "description": "Subtotal s/IVA" },
+        "taxAmount": { "type": "number", "description": "Valor total de IVA" },
+        "totalWithTax": { "type": "number", "description": "Valor total c/IVA" },
+        "receiptImageUrl": { "type": "string", "description": "URL ou miniatura do recibo anexado" },
+        "items": { "type": "array", "description": "Lista de produtos e materiais contidos na fatura" },
+        "notes": { "type": "string", "description": "Notas e observações da fatura" },
+        "createdAt": { "type": "string", "description": "Data de criação" },
+        "ownerId": { "type": "string", "description": "UID do utilizador proprietário" }
+      },
+      "required": ["id", "obraId", "storeName", "invoiceNumber", "totalWithTax", "createdAt", "ownerId"]
+    },
+    "LaborRecord": {
+      "title": "LaborRecord",
+      "description": "Registo de horas e custos de mão de obra",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID único do registo" },
+        "obraId": { "type": "string", "description": "ID da obra correspondente" },
+        "date": { "type": "string", "description": "Data do trabalho" },
+        "workerName": { "type": "string", "description": "Nome do trabalhador ou oficial" },
+        "description": { "type": "string", "description": "Descrição dos trabalhos realizados" },
+        "hoursOrDays": { "type": "number", "description": "Quantidade de horas ou dias" },
+        "unitType": { "type": "string", "description": "Tipo de unidade (horas ou dias)" },
+        "costRate": { "type": "number", "description": "Custo por unidade" },
+        "totalCost": { "type": "number", "description": "Custo total" },
+        "createdAt": { "type": "string", "description": "Data de criação" },
+        "ownerId": { "type": "string", "description": "UID do utilizador proprietário" }
+      },
+      "required": ["id", "obraId", "workerName", "hoursOrDays", "totalCost", "createdAt", "ownerId"]
+    }
+  },
+  "firestore": {
+    "/obras/{obraId}": {
+      "schema": "Obra",
+      "description": "Coleção de obras do utilizador"
+    },
+    "/invoices/{invoiceId}": {
+      "schema": "Invoice",
+      "description": "Coleção de faturas do utilizador"
+    },
+    "/labor/{laborId}": {
+      "schema": "LaborRecord",
+      "description": "Coleção de registos de mão de obra do utilizador"
+    }
+  }
+}
