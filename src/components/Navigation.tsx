@@ -16,7 +16,6 @@ import {
   LogIn,
   CheckCircle2,
   CalendarClock,
-  RefreshCw,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { MaterialSearchBar } from './MaterialSearchBar';
@@ -38,28 +37,6 @@ export const Navigation: React.FC = () => {
   } = useApp();
 
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  const handleForceUpdate = async () => {
-    setIsUpdating(true);
-    try {
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const reg of registrations) {
-          await reg.unregister();
-        }
-      }
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        for (const key of keys) {
-          await caches.delete(key);
-        }
-      }
-    } catch (e) {
-      console.warn('Cache clear error:', e);
-    }
-    window.location.href = window.location.origin + '/?updated=' + Date.now();
-  };
 
   const handleNavClick = (tabId: 'dashboard' | 'obras' | 'faturas' | 'orcamentos' | 'materiais' | 'sheets' | 'manutencoes') => {
     setSelectedObraId(null);
@@ -117,7 +94,6 @@ export const Navigation: React.FC = () => {
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id && !selectedObraId;
-            const isManutencoes = item.id === 'manutencoes';
             return (
               <button
                 key={item.id}
@@ -125,20 +101,13 @@ export const Navigation: React.FC = () => {
                 className={`w-full flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
                   isActive
                     ? 'bg-black dark:bg-white text-white dark:text-black shadow-md'
-                    : isManutencoes
-                    ? 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10'
                     : 'text-slate-600 dark:text-neutral-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white dark:text-black' : isManutencoes ? 'text-emerald-500' : 'text-slate-400 dark:text-neutral-500'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white dark:text-black' : 'text-slate-400 dark:text-neutral-500'}`} />
                   <span>{item.label}</span>
                 </div>
-                {isManutencoes && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
-                    Novo
-                  </span>
-                )}
               </button>
             );
           })}
@@ -213,28 +182,6 @@ export const Navigation: React.FC = () => {
             )}
           </button>
         </div>
-
-        {/* Bottom App Version & Force Cache Refresh */}
-        <div className="pt-2.5 mt-2 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
-          <div className="min-w-0 pr-1">
-            <div className="text-[11px] font-bold text-slate-800 dark:text-neutral-200 truncate">
-              v2.5 Manutenções
-            </div>
-            <div className="text-[9px] text-emerald-500 font-semibold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Sincronizado</span>
-            </div>
-          </div>
-          <button
-            onClick={handleForceUpdate}
-            disabled={isUpdating}
-            className="p-1.5 rounded-xl bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-600 dark:text-neutral-300 transition flex items-center gap-1"
-            title="Atualizar Aplicação / Limpar Cache PWA"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isUpdating ? 'animate-spin text-blue-500' : ''}`} />
-            <span className="text-[10px] font-bold">Atualizar</span>
-          </button>
-        </div>
       </aside>
 
       {/* Top Bar for Desktop & Mobile - Never overlaps sidebar */}
@@ -292,15 +239,6 @@ export const Navigation: React.FC = () => {
               )}
 
               <button
-                onClick={handleForceUpdate}
-                disabled={isUpdating}
-                className="p-2 rounded-xl bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-neutral-300 transition"
-                title="Recarregar / Limpar Cache"
-              >
-                <RefreshCw className={`w-4 h-4 ${isUpdating ? 'animate-spin text-blue-500' : ''}`} />
-              </button>
-
-              <button
                 onClick={toggleDarkMode}
                 className="p-2 rounded-xl bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-neutral-300 transition"
                 title="Alternar Tema"
@@ -321,7 +259,6 @@ export const Navigation: React.FC = () => {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id && !selectedObraId;
-              const isManutencoes = item.id === 'manutencoes';
               return (
                 <button
                   key={`top-nav-${item.id}`}
@@ -329,16 +266,11 @@ export const Navigation: React.FC = () => {
                   className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                     isActive
                       ? 'bg-black dark:bg-white text-white dark:text-black shadow-md'
-                      : isManutencoes
-                      ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25'
                       : 'bg-black/5 dark:bg-white/5 text-slate-600 dark:text-neutral-400 hover:text-black dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white dark:text-black' : isManutencoes ? 'text-emerald-500' : ''}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white dark:text-black' : ''}`} />
                   <span>{item.label}</span>
-                  {isManutencoes && (
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  )}
                 </button>
               );
             })}
@@ -371,8 +303,6 @@ export const Navigation: React.FC = () => {
                   className={`shrink-0 flex flex-col items-center justify-center py-1 px-1 rounded-2xl transition-all min-w-[46px] ${
                     isActive
                       ? 'text-blue-500 font-bold'
-                      : item.id === 'manutencoes'
-                      ? 'text-emerald-600 dark:text-emerald-400 font-bold'
                       : 'text-slate-500 dark:text-neutral-400'
                   }`}
                 >
@@ -380,11 +310,9 @@ export const Navigation: React.FC = () => {
                   <span className="text-[9px] mt-0.5 tracking-tight truncate max-w-[50px]">
                     {item.shortLabel}
                   </span>
-                  {isActive ? (
+                  {isActive && (
                     <span className="w-1 h-1 rounded-full bg-blue-500 mt-0.5" />
-                  ) : item.id === 'manutencoes' ? (
-                    <span className="w-1 h-1 rounded-full bg-emerald-500 mt-0.5" />
-                  ) : null}
+                  )}
                 </button>
               </React.Fragment>
             );

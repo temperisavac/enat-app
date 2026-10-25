@@ -28,7 +28,6 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { Invoice } from '../types';
-import { SystemStatusCard } from './SystemStatusCard';
 
 export const DashboardView: React.FC = () => {
   const {
@@ -245,9 +244,6 @@ export const DashboardView: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* System Status & Deployment Version Confirmation */}
-      <SystemStatusCard />
 
       {/* Revolut Big Card: Hero is Total de Obras Adjudicadas (Derivado de Orçamentos Adjudicados e NÃO das faturas) */}
       <div className="rounded-3xl p-6 sm:p-8 revolut-card revolut-shadow relative overflow-hidden">
